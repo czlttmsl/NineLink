@@ -19,7 +19,34 @@ public partial class MainWindow : Window
             Updater.CleanupOldFiles(_root);
             Detect();
             await CheckForUpdate();
+            await SendErrorReports();
         };
+    }
+
+    async Task SendErrorReports()
+    {
+        if (Updater.GameRunning()) return; // the log is still being written
+        bool? consent = ErrorReporter.Consent(_root);
+        if (consent is null)
+        {
+            var r = MessageBox.Show(this,
+                "要帮助改进 NineLink 吗？\n\n" +
+                "开启后，模组日志里出现错误时，启动器会把相关的几十行日志发给作者，用来找 bug 和修 bug。\n" +
+                "发送前会去掉文件路径、Steam ID、电脑用户名和昵称；发送的内容会保存在 log\\sent_reports 文件夹里，随时可以查看。\n\n" +
+                "以后想改，把 report.cfg 里的 yes 改成 no（或删掉这个文件重新选择）。",
+                "NineLink 错误报告", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            consent = r == MessageBoxResult.Yes;
+            ErrorReporter.SetConsent(_root, consent.Value);
+        }
+        if (consent != true) return;
+        try
+        {
+            await ErrorReporter.RunAsync(_root, _game?.BuildId ?? "?", new Progress<string>(Log));
+        }
+        catch (Exception ex)
+        {
+            Log("错误报告失败：" + ex.Message);
+        }
     }
 
     async Task CheckForUpdate()

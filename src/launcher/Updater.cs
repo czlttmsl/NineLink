@@ -20,7 +20,7 @@ public static class Updater
     public const string ReleasesPage = $"https://github.com/{Repo}/releases";
 
     // Files that belong to the player and are never overwritten by an update.
-    static readonly HashSet<string> Keep = new(StringComparer.OrdinalIgnoreCase) { "ninelink.ini" };
+    static readonly HashSet<string> Keep = new(StringComparer.OrdinalIgnoreCase) { "ninelink.ini", "report.cfg" };
 
     public static Version Current { get; } = ParseVersion(
         Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion

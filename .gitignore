@@ -13,6 +13,9 @@ out/
 log/
 *.log
 ninelink.ini
+report.cfg
+reporter/node_modules/
+reporter/.wrangler/
 debug_*.txt
 
 # Editor / OS

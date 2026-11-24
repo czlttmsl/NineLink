@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NineLink - 9 Kings 联机模组</title>
+<meta name="description" content="NineLink：9 Kings 好友实时联机模组，支持 Steam 好友房间与服务器大厅，每年同步对战。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#12131c; --bg2:#1a1c28; --card:#202334; --line:#2f3349;
+  --text:#e9e6dc; --muted:#a6a3b4; --gold:#e3b75a; --gold2:#f5d58c; --accent:#8b5cf6;
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:"Noto Sans SC",system-ui,sans-serif;line-height:1.7;overflow-x:hidden}
+a{color:var(--gold2);text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:"Noto Serif SC",serif;line-height:1.3}
+h2{font-size:clamp(1.6rem,3.5vw,2.2rem);text-align:center;margin-bottom:.4em}
+.sub{color:var(--muted);text-align:center;max-width:620px;margin:0 auto 2.5rem}
+section{padding:80px 0;border-top:1px solid var(--line)}
+
+/* nav */
+nav{position:sticky;top:0;z-index:10;background:rgba(18,19,28,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.brand{font-family:"Noto Serif SC",serif;font-weight:900;color:var(--gold);font-size:1.15rem;display:flex;gap:.5em;align-items:center}
+.links{display:flex;gap:22px}
+.links a{color:var(--muted);font-size:.95rem}
+.links a:hover{color:var(--text)}
+@media(max-width:640px){.links a:not(.dl-link){display:none}}
+
+/* hero */
+.hero{padding:110px 0 90px;text-align:center;border:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(227,183,90,.18),transparent 60%),
+             radial-gradient(ellipse at 80% 100%,rgba(139,92,246,.15),transparent 55%)}
+.crown{font-size:3.2rem;filter:drop-shadow(0 4px 18px rgba(227,183,90,.5))}
+.hero h1{font-size:clamp(2.2rem,6vw,3.8rem);font-weight:900;margin:.2em 0;
+  background:linear-gradient(180deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.tagline{font-size:1.15rem;color:var(--muted);max-width:640px;margin:0 auto 2rem}
+.badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:2.2rem}
+.badge{border:1px solid var(--line);background:var(--bg2);padding:4px 12px;border-radius:99px;font-size:.85rem;color:var(--muted)}
+.badge b{color:var(--text);font-weight:500}
+.btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.5em;padding:12px 26px;border-radius:10px;font-weight:700;transition:.15s}
+.btn-primary{background:linear-gradient(180deg,var(--gold2),var(--gold));color:#2a1d05;box-shadow:0 6px 24px rgba(227,183,90,.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(227,183,90,.4)}
+.btn-ghost{border:1px solid var(--line);color:var(--text);background:var(--bg2)}
+.btn-ghost:hover{border-color:var(--gold)}
+
+/* features */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;transition:.2s}
+.card:hover{border-color:rgba(227,183,90,.5);transform:translateY(-3px)}
+.card .ico{font-size:1.8rem;margin-bottom:.4em}
+.card h3{font-size:1.15rem;margin-bottom:.3em;color:var(--gold2)}
+.card p{color:var(--muted);font-size:.95rem}
+
+/* gallery */
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.shot{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:var(--card);cursor:zoom-in}
+.shot img{aspect-ratio:16/9;object-fit:cover;width:100%;transition:.3s}
+.shot:hover img{transform:scale(1.04)}
+.shot .ph{aspect-ratio:16/9;display:grid;place-items:center;color:var(--muted);font-size:.9rem;
+  background:repeating-linear-gradient(45deg,var(--card),var(--card) 12px,var(--bg2) 12px,var(--bg2) 24px)}
+.shot figcaption{padding:10px 14px;font-size:.9rem;color:var(--muted)}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;place-items:center;z-index:50;padding:20px;cursor:zoom-out}
+.lightbox.on{display:grid}
+.lightbox img{max-height:90vh;border-radius:10px}
+
+/* download */
+.dl-box{background:linear-gradient(160deg,#262a40,var(--card));border:1px solid rgba(227,183,90,.35);border-radius:20px;padding:36px;max-width:760px;margin:0 auto;text-align:center}
+.ver{font-family:"Noto Serif SC",serif;font-size:1.6rem;color:var(--gold2)}
+.meta{color:var(--muted);font-size:.9rem;margin:.3em 0 1.6em}
+.mirrors{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:22px;text-align:left}
+.mirror{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;color:var(--text)}
+.mirror:hover{border-color:var(--gold)}
+.mirror small{color:var(--muted)}
+.req{margin-top:22px;font-size:.88rem;color:var(--muted)}
+
+/* install */
+.steps{counter-reset:s;max-width:720px;margin:0 auto;display:grid;gap:14px}
+.step{counter-increment:s;display:flex;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px}
+.step::before{content:counter(s);flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  background:var(--gold);color:#2a1d05;font-weight:900;font-family:"Noto Serif SC",serif}
+.step p{color:var(--muted)}
+.step b{color:var(--text)}
+code{background:var(--bg);border:1px solid var(--line);padding:1px 6px;border-radius:5px;font-size:.88em;color:var(--gold2);word-break:break-all}
+
+/* changelog */
+.log{max-width:720px;margin:0 auto;border-left:2px solid var(--line);padding-left:24px}
+.entry{position:relative;margin-bottom:28px}
+.entry::before{content:"";position:absolute;left:-31px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--gold)}
+.entry h3{font-size:1.1rem}
+.entry .date{color:var(--muted);font-size:.85rem;font-weight:400;margin-left:.6em;font-family:"Noto Sans SC"}
+.entry ul{padding-left:1.2em;color:var(--muted)}
+
+/* faq */
+.faq{max-width:720px;margin:0 auto}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;padding:0 20px}
+summary{cursor:pointer;padding:16px 0;font-weight:500;list-style:none;display:flex;justify-content:space-between}
+summary::after{content:"+";color:var(--gold);font-size:1.3rem;line-height:1}
+details[open] summary::after{content:"−"}
+details p{color:var(--muted);padding-bottom:16px}
+
+footer{border-top:1px solid var(--line);padding:40px 0;text-align:center;color:var(--muted);font-size:.88rem}
+footer .social{display:flex;gap:18px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<!--
+  ============================================================
+  ✏️ 你只需要修改下面 <script> 里的 CONFIG 对象即可更新整个网站。
+  图片放在 site/images/ 文件夹里，然后在 screenshots 里填路径。
+  ============================================================
+-->
+<script>
+const CONFIG = {
+  modName: "NineLink",                   // 模组名称
+  tagline: "9 Kings 好友实时联机模组：和好友各自布置王国，每一年同时开战，看谁的国王撑到最后。",
+  icon: "👑",
+  version: "v0.1.0 测试版",
+  releaseDate: "2026-11-24",
+  gameVersion: "构建 26768399（2026-11-21）",
+  loader: "独立启动器",                  // 模组加载器，没有就留空 ""
+  fileSize: "约 0.7 MB",
+  requirements: "需要：Windows 64 位 · Steam 正版 9 Kings · .NET 8 桌面运行时",
+
+  // 如果你把模组发布在 GitHub Releases，填 "用户名/仓库名"，
+  // 网站会自动读取最新版本号和下载链接（填了以后会覆盖上面的 version / mainDownload）
+  githubRepo: "",
+
+  mainDownload: "#",                     // 主下载链接（例如 GitHub Release 的 zip 地址）
+  mirrors: [                             // 备用下载渠道，可增删
+    { name: "GitHub Releases", note: "推荐 · 海外", url: "#" },
+    { name: "蓝奏云",          note: "国内高速",    url: "#" },
+    { name: "联机服务器程序",  note: "可选 · 自建服务器用", url: "#" },
+  ],
+
+  features: [
+    { icon: "⚔️", title: "每年同步对战", desc: "所有人布置完、点下开战后，大家的王国同时对打。准备好的人会看到“等待好友完成准备”，等满 60 秒后可以选择不再等待。" },
+    { icon: "👥", title: "Steam 好友房间", desc: "直接和 Steam 好友开房，走 Steam 中继，不需要服务器，也不用开端口。" },
+    { icon: "🌐", title: "服务器大厅", desc: "也可以连接 NineLink 服务器，用大厅加转发联机，不依赖 Steam 好友关系，同样不用开端口。" },
+    { icon: "🚀", title: "一键启动器", desc: "NineLink.exe 会自动找到游戏、核对游戏版本，点“启动游戏”就能进入联机模式。" },
+    { icon: "📜", title: "多人特权页", desc: "按官方多人界面的样式制作：3×3 特权格子、3 个存档位，拖动就能摆放特权。" },
+    { icon: "🛡️", title: "不碰官方数据", desc: "联机对局不会上传到官方服务器，不影响官方排位，也不改动你的存档。" },
+  ],
+
+  screenshots: [                         // img 留空会显示占位框
+    { img: "", caption: "NineLink 启动器" },
+    { img: "", caption: "联机大厅：Steam 好友 / 服务器" },
+    { img: "", caption: "多人特权页" },
+    { img: "", caption: "同步对战：等待好友完成准备" },
+  ],
+
+  installSteps: [
+    "安装 <b>.NET 8 桌面运行时</b>（Windows x64 版，在微软官网搜索“.NET 8 Desktop Runtime”下载）。已经装过的可以跳过。",
+    "下载 NineLink 压缩包，<b>解压到任意文件夹</b>，不需要放进游戏目录，也不会修改游戏文件。",
+    "打开 Steam，双击 <code>NineLink.exe</code>。启动器会自动找到 9 Kings 并核对游戏版本，然后点<b>“启动游戏”</b>。",
+    "进入游戏后点右上角的<b>“联机 NineLink”</b>，选择 <b>Steam 好友</b>或<b>服务器</b>标签，创建或加入房间。房间里每人要选不同的国王，然后开局。",
+    "（可选）使用服务器模式时，在 <code>ninelink.ini</code> 里把 <code>server=</code> 改成服务器的 <code>IP:27700</code>。这个文件在首次运行后自动生成。",
+  ],
+
+  changelog: [
+    { version: "v0.1.0 测试版", date: "2026-11-24", changes: [
+      "首个测试版本",
+      "支持 Steam 好友房间和服务器大厅两种联机方式",
+      "每年同步对战：布置完一起开战，生命按各自游戏结算",
+      "新增仿官方样式的多人特权页（3 个存档位）",
+      "启动器会自动找到游戏、核对版本并注入模组",
+    ] },
+  ],
+
+  faq: [
+    { q: "杀毒软件报毒 / 拦截怎么办？", a: "NineLink 要把模组注入到游戏进程里才能运行，这种方式容易被杀毒软件误报。请把 NineLink 所在文件夹加入信任列表。" },
+    { q: "启动器提示“游戏版本不匹配”？", a: "9 Kings 更新后，模组需要跟着适配。请等待新版 NineLink；在此期间强行启动可能出错。" },
+    { q: "会影响我的存档或官方排位吗？", a: "不会。NineLink 不往官方服务器提交任何数据，特权按你自己的进度计算。" },
+    { q: "为什么不能和好友选同一个国王？", a: "游戏是按国王来区分对手的，所以同一个房间里每个人必须选不同的国王。" },
+    { q: "昵称显示成空白？", a: "游戏的多人界面使用英文字体，中文昵称会显示成空格。建议在 ninelink.ini 的 name= 里填英文名。" },
+    { q: "怎么自己搭服务器？", a: "下载“联机服务器程序”并运行 ninelink_server（默认端口 27700，可用 --port 修改）。部署在云服务器上时，要在防火墙里放行 TCP 27700，然后让玩家在 ninelink.ini 里填上服务器地址。" },
+    { q: "如何卸载？", a: "直接删除 NineLink 文件夹即可，游戏本身没有被修改过。" },
+  ],
+
+  author: "你的名字",
+  social: [                              // 反馈 / 社区渠道
+    { name: "GitHub", url: "#" },
+    { name: "B站",    url: "#" },
+    { name: "QQ群",   url: "#" },
+    { name: "Discord", url: "#" },
+  ],
+};
+</script>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top"><span data-k="icon"></span><span data-k="modName"></span></a>
+    <div class="links">
+      <a href="#features">特色</a><a href="#gallery">截图</a><a href="#install">安装</a><a href="#changelog">更新日志</a>
+      <a class="dl-link" href="#download" style="color:var(--gold)">下载</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="crown" data-k="icon"></div>
+    <h1 data-k="modName"></h1>
+    <p class="tagline" data-k="tagline"></p>
+    <div class="badges" id="badges"></div>
+    <div class="btns">
+      <a class="btn btn-primary" href="#download">⬇ 立即下载</a>
+      <a class="btn btn-ghost" href="#features">了解更多</a>
+    </div>
+  </div>
+</header>
+
+<section id="features"><div class="wrap">
+  <h2>模组特色</h2><p class="sub">这个模组为你的王国带来了什么</p>
+  <div class="grid" id="featureGrid"></div>
+</div></section>
+
+<section id="gallery"><div class="wrap">
+  <h2>游戏截图</h2><p class="sub">点击图片可放大查看</p>
+  <div class="gallery" id="galleryGrid"></div>
+</div></section>
+
+<section id="download"><div class="wrap">
+  <h2>下载</h2><p class="sub">免费下载，选择离你最快的渠道</p>
+  <div class="dl-box">
+    <div class="ver" id="dlVer"></div>
+    <div class="meta" id="dlMeta"></div>
+    <a class="btn btn-primary" id="dlMain" href="#">⬇ 下载最新版本</a>
+    <div class="mirrors" id="mirrors"></div>
+    <p class="req" id="dlReq"></p>
+  </div>
+</div></section>
+
+<section id="install"><div class="wrap">
+  <h2>安装教程</h2><p class="sub">几分钟即可完成</p>
+  <div class="steps" id="steps"></div>
+</div></section>
+
+<section id="changelog"><div class="wrap">
+  <h2>更新日志</h2><p class="sub">&nbsp;</p>
+  <div class="log" id="log"></div>
+</div></section>
+
+<section id="faq"><div class="wrap">
+  <h2>常见问题</h2><p class="sub">&nbsp;</p>
+  <div class="faq" id="faqList"></div>
+</div></section>
+
+<footer>
+  <div class="wrap">
+    <div class="social" id="social"></div>
+    <p>由 <span data-k="author"></span> 制作 · 本模组为玩家自制的非官方作品，与 9 Kings 开发商无关。</p>
+  </div>
+</footer>
+
+<div class="lightbox" id="lb"><img alt=""></div>
+
+<script>
+const C = CONFIG, $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+document.title = C.modName + " - 9 Kings 联机模组";
+document.querySelectorAll("[data-k]").forEach(el => el.textContent = C[el.dataset.k]);
+
+function renderVersion(ver, date, url, size){
+  $("badges").innerHTML = [["版本", ver], ["适配", C.gameVersion], C.loader && ["加载器", C.loader]]
+    .filter(Boolean).map(([k,v]) => `<span class="badge">${k} <b>${esc(v)}</b></span>`).join("");
+  $("dlVer").textContent = ver;
+  $("dlMeta").textContent = `发布于 ${date} · ${size}`;
+  $("dlMain").href = url;
+}
+renderVersion(C.version, C.releaseDate, C.mainDownload, C.fileSize);
+
+$("featureGrid").innerHTML = C.features.map(f =>
+  `<div class="card"><div class="ico">${f.icon}</div><h3>${esc(f.title)}</h3><p>${esc(f.desc)}</p></div>`).join("");
+
+$("galleryGrid").innerHTML = C.screenshots.map(s =>
+  `<figure class="shot">${s.img ? `<img src="${esc(s.img)}" alt="${esc(s.caption)}" loading="lazy">` : `<div class="ph">在 CONFIG.screenshots 中添加截图</div>`}
+   <figcaption>${esc(s.caption)}</figcaption></figure>`).join("");
+
+$("mirrors").innerHTML = C.mirrors.map(m =>
+  `<a class="mirror" href="${esc(m.url)}" target="_blank" rel="noopener"><span>${esc(m.name)}<br><small>${esc(m.note)}</small></span><span>→</span></a>`).join("");
+$("dlReq").textContent = C.requirements || "";
+
+$("steps").innerHTML = C.installSteps.map(s => `<div class="step"><p>${s}</p></div>`).join("");
+$("log").innerHTML = C.changelog.map(e =>
+  `<div class="entry"><h3>${esc(e.version)}<span class="date">${esc(e.date)}</span></h3><ul>${e.changes.map(c=>`<li>${esc(c)}</li>`).join("")}</ul></div>`).join("");
+$("faqList").innerHTML = C.faq.map(f => `<details><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("");
+$("social").innerHTML = C.social.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a>`).join("");
+
+// lightbox
+const lb = $("lb");
+document.addEventListener("click", e => {
+  const img = e.target.closest(".shot img");
+  if (img){ lb.querySelector("img").src = img.src; lb.classList.add("on"); }
+  else if (e.target.closest("#lb")) lb.classList.remove("on");
+});
+
+// 自动读取 GitHub 最新 Release
+if (C.githubRepo){
+  fetch(`https://api.github.com/repos/${C.githubRepo}/releases/latest`)
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(rel => {
+      const asset = rel.assets && rel.assets[0];
+      const url = asset ? asset.browser_download_url : rel.html_url;
+      const size = asset ? (asset.size/1048576).toFixed(1) + " MB" : C.fileSize;
+      const total = (rel.assets||[]).reduce((n,a) => n + a.download_count, 0);
+      renderVersion(rel.tag_name, rel.published_at.slice(0,10), url, size + (total ? ` · 已下载 ${total} 次` : ""));
+    }).catch(() => {});
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+# Build output (released as zip on GitHub Releases, not committed)
+bin/
+obj/
+build/
+dist/
+out/
+*.zip
+*.pdb
+*.exp
+*.lib
+
+# Runtime files
+log/
+*.log
+ninelink.ini
+debug_*.txt
+
+# Editor / OS
+.vs/
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini

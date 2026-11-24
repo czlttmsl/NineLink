@@ -1,0 +1,30 @@
+<Window x:Class="NineLink.Launcher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="NineLink — 9 Kings 联机" Width="640" Height="440"
+        WindowStartupLocation="CenterScreen" Background="#1E1B18">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="NineLink" FontSize="26" FontWeight="Bold" Foreground="#F2C14E"/>
+
+        <StackPanel Grid.Row="1" Margin="0,8,0,8">
+            <TextBlock x:Name="GameText" Foreground="#E8E2D6" TextWrapping="Wrap"/>
+            <TextBlock x:Name="BuildText" Foreground="#E8E2D6" TextWrapping="Wrap" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <TextBox x:Name="LogBox" Grid.Row="2" IsReadOnly="True" FontFamily="Consolas" FontSize="12"
+                 Background="#14110F" Foreground="#CFC8BA" BorderBrush="#3A332C"
+                 VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"/>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+            <Button x:Name="OpenLogButton" Content="打开日志文件夹" Padding="14,6" Margin="0,0,8,0" Click="OpenLog_Click"/>
+            <Button x:Name="LaunchButton" Content="启动游戏" Padding="22,6" FontWeight="Bold" Click="Launch_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

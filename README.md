@@ -66,6 +66,20 @@
 构建：`powershell -File build.ps1`（需要 VS 2022 Build Tools C++ 工作负载 + .NET 8 SDK），输出到 `dist\`。
 游戏运行时 `ninelink.dll` 被占用，重新构建前先关掉游戏。
 
+## 发布新版本 / 自动更新
+```
+powershell -File release.ps1 -Version 0.1.1 -Notes "修复了 xxx"
+```
+一条命令完成：改 `Directory.Build.props` 里的版本号 → `build.ps1` → 打包 `NineLink-<版本>.zip`、
+`NineLink-server-<版本>.zip`、`SHA256SUMS.txt` → 提交、打 tag `v<版本>` → `gh release create`。
+加 `-DryRun` 只构建打包，不提交也不发布。
+
+启动器（`src/launcher/Updater.cs`）每次打开都会查 GitHub 最新 Release，版本更新就显示“立即更新”。
+点击后：下载 zip → 按 `SHA256SUMS.txt` 校验（不符就取消）→ 把旧文件改名为 `.old` 再放入新文件
+（失败则全部还原）→ 重启启动器，下次启动删除 `.old`。`ninelink.ini` 不会被覆盖；游戏运行时不允许更新。
+网站（`docs/`，GitHub Pages）也从同一个 Release 读取版本号和下载链接。
+测试用：环境变量 `NINELINK_UPDATE_API` 可把检查地址指向本地的假 Release JSON。
+
 ## 阶段 1 结果（2026-11-23，构建号 26768399 / GameAssembly 0x6AFE071D）
 - 注入成功，IL2CPP API 全部可用，Assembly-CSharp 2751 个类全部可读。
 - 类型清单：`dist\log\dump_<GameAssembly时间戳>.cs`。

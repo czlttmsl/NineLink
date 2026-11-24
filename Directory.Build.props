@@ -1,0 +1,6 @@
+﻿<Project>
+  <!-- NineLink version: release.ps1 updates this. The launcher compares it with the latest GitHub release. -->
+  <PropertyGroup>
+    <Version>0.1.0</Version>
+  </PropertyGroup>
+</Project>
